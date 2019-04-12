@@ -19,6 +19,11 @@ export default function createGenerateClassName(options = {}) {
   return (rule, styleSheet) => {
     const isStatic = !styleSheet.options.link;
 
+    // For testing, MUI produces duplicate results for Snapshots
+
+    if (process.env.NODE_ENV === 'test') {
+      return `${safePrefix(styleSheet.options.name)}-${rule.key}`;
+    }
     if (dangerouslyUseGlobalCSS && styleSheet && styleSheet.options.name && isStatic) {
       return `${safePrefix(styleSheet.options.name)}-${rule.key}`;
     }
